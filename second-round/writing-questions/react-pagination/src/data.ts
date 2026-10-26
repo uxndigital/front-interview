@@ -34,10 +34,10 @@ export default async function getData({
   }
   const pageCount = Math.ceil(maxValue / pageSize);
 
-  const dataSource = range(0, pageCount).map((page) => {
+  const dataSource = range(0, pageCount).map((page:number) => {
     return {
       data: range(pageSize * page, pageSize * page + pageSize).map(
-        (value) => value + 1,
+        (value:number) => value + 1,
       ),
       totalSize: maxValue,
       pageCount,
