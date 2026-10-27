@@ -24,19 +24,21 @@ export default async function getData({
   pageSize,
 }: GetDataParams): Promise<PageData | null> {
   const maxValue = 100;
+  const pageCount = Math.ceil(maxValue / pageSize);
+
   if (
     typeof page !== "number" ||
     typeof pageSize !== "number" ||
-    page * pageSize > 100 ||
-    page * pageSize < 0
+    pageSize <= 0 ||
+    page < 1 ||
+    page > pageCount
   ) {
     return null;
   }
-  const pageCount = Math.ceil(maxValue / pageSize);
 
-  const dataSource = range(0, pageCount).map((page:number) => {
+  const dataSource = range(0, pageCount).map((pageIndex:number) => {
     return {
-      data: range(pageSize * page, pageSize * page + pageSize).map(
+      data: range(pageSize * pageIndex, pageSize * pageIndex + pageSize).map(
         (value:number) => value + 1,
       ),
       totalSize: maxValue,
@@ -47,5 +49,5 @@ export default async function getData({
   // 模拟网络延迟 3 秒
   await sleep(3000);
 
-  return dataSource[page];
+  return dataSource[page - 1];
 }
